@@ -1,0 +1,67 @@
+function connectToUpper = decomposer(basicSolution)
+    Problem = PROBLEM.Current;
+    basicsolution = basicSolution(unidrnd(size(basicSolution,2)));
+    ulDec = basicsolution.ulDec;
+    llDec = basicsolution.llDec;
+    Dec = [basicSolution.ulDec basicSolution.llDec];
+
+    % 将上层每一维决策变量进行改变
+    upperVariedSolution = [];
+    for i = 1:Problem.Du
+        s = ulDec;
+        s(i) = s(i)*1.5;
+        us = SOLUTION(s,llDec);
+        upperVariedSolution = [upperVariedSolution us];
+    end
+
+    lowerVariedSolution = [];
+    for i = 1:Problem.Dl
+        s = llDec;
+        s = s(i)*1.5;
+        ls = SOLUTION(ulDec,s);
+        lowerVariedSolution = [lowerVariedSolution ls];
+    end
+    
+    bothVariedSolution = [];
+    for i = 1:Problem.Du
+        for j = 1:Problem.Dl
+            s = Dec;
+            s = s(i)*1.5;
+            s = s(Problem.Du+j)*1.5;
+            bs = SOLUTION(s(1:Problem.Du),s(Problem.Du:end));
+            bothVariedSolution = [bothVariedSolution bs];
+        end
+    end
+
+    mArray = {};
+    for k = 1:2
+        array = zeros(Problem.Du,Problem.Dl);
+        for i = 1:Problem.Du
+            delta1 = upperVariedSolution(i).ulObj(k) - basicsolution.ulObj(k);
+            for j = 1:Problem.Nl
+                delta2 = bothVariedSolution((i-1)*Problem.Dl +j).ulObj(k)
+            end
+        end
+    end
+
+    for k = 1:2
+        array = zeros(Problem.Du,Problem.Dl);
+        for i = 1:Problem.Du
+            delta1 = upperVariedSolution(i).llObj(k) - basicsolution.llObj(k);
+            
+            for j = 1:Problem.Nl
+                delta2 = bothVariedSolution((i-1)*Problem.Dl +j).llObj(k) - lowerVariedSolution(j).llObj(k);
+
+                value = abs(delta1-delta2);
+                array(i,j) = value;
+                array(j,i) = value;
+            end
+        end
+        mArray(i) = array;
+    end
+
+
+    
+
+end
+
