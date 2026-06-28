@@ -48,8 +48,10 @@ function score = HV(Population,optimum)
     end
 
 %%
-    ans = Population.ulObjs;
-    save("d:/MSE-SWork/data/DMP/dmt-my.mat",'ans');
+    if ~FGTLEAGetParameter('skipLegacySave',false)
+        ans = Population.ulObjs;
+        save("d:/MSE-SWork/data/DMP/dmt-my.mat",'ans');
+    end
     Problem = PROBLEM.Current();
     index = [];
     PopObj = Population.ulObjs;

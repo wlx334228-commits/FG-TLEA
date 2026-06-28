@@ -94,41 +94,45 @@ function [Population,Elite,PPre,Pre] = ulOptimizerReal(Population,Elite,PPre,Pre
     %%
     namestr = ['h' num2str(Problem.gen)  '=calHV'];
     eval(namestr);
-    if isa(Problem,'TP1')
-        save('TP1HV.mat', ['h' num2str(Problem.gen)], '-append');
-    elseif isa(Problem,'TP2')
-        save('TP2HV.mat', ['h' num2str(Problem.gen)], '-append'); 
-    elseif isa(Problem,'DS1')
-        save('DS1HV.mat', ['h' num2str(Problem.gen)], '-append'); 
-    elseif isa(Problem,'DS2')
-        save('DS2HV.mat', ['h' num2str(Problem.gen)], '-append');
-    elseif isa(Problem,'DS3')
-        save('DS3HV.mat', ['h' num2str(Problem.gen)], '-append'); 
-    elseif isa(Problem,'DS4')
-        save('DS4HV.mat', ['h' num2str(Problem.gen)], '-append'); 
-    elseif isa(Problem,'DS5')
-        save('DS5HV.mat', ['h' num2str(Problem.gen)], '-append');
-    elseif isa(Problem,'DMP')
-        save('hv.mat', ['h' num2str(Problem.gen)]);
+    if ~FGTLEAGetParameter('skipLegacySave',false)
+        if isa(Problem,'TP1')
+            save('TP1HV.mat', ['h' num2str(Problem.gen)], '-append');
+        elseif isa(Problem,'TP2')
+            save('TP2HV.mat', ['h' num2str(Problem.gen)], '-append');
+        elseif isa(Problem,'DS1')
+            save('DS1HV.mat', ['h' num2str(Problem.gen)], '-append');
+        elseif isa(Problem,'DS2')
+            save('DS2HV.mat', ['h' num2str(Problem.gen)], '-append');
+        elseif isa(Problem,'DS3')
+            save('DS3HV.mat', ['h' num2str(Problem.gen)], '-append');
+        elseif isa(Problem,'DS4')
+            save('DS4HV.mat', ['h' num2str(Problem.gen)], '-append');
+        elseif isa(Problem,'DS5')
+            save('DS5HV.mat', ['h' num2str(Problem.gen)], '-append');
+        elseif isa(Problem,'DMP')
+            save('hv.mat', ['h' num2str(Problem.gen)]);
+        end
     end
 
     FE = Problem.ulFE + Problem.llFE;
     namestr = ['f' num2str(Problem.gen) '=FE'];
     eval(namestr);
-    if isa(Problem,'TP1')
-        save('TP1FE.mat', ['f' num2str(Problem.gen)], '-append');
-    elseif isa(Problem,'TP2')
-        save('TP2FE.mat', ['f' num2str(Problem.gen)], '-append'); 
-    elseif isa(Problem,'DS1')
-        save('DS1FE.mat', ['f' num2str(Problem.gen)], '-append'); 
-    elseif isa(Problem,'DS2')
-        save('DS2FE.mat', ['f' num2str(Problem.gen)], '-append');
-    elseif isa(Problem,'DS3')
-        save('DS3FE.mat', ['f' num2str(Problem.gen)], '-append'); 
-    elseif isa(Problem,'DS4')
-        save('DS4FE.mat', ['f' num2str(Problem.gen)], '-append'); 
-    elseif isa(Problem,'DS5')
-        save('DS5FE.mat', ['f' num2str(Problem.gen)], '-append');
+    if ~FGTLEAGetParameter('skipLegacySave',false)
+        if isa(Problem,'TP1')
+            save('TP1FE.mat', ['f' num2str(Problem.gen)], '-append');
+        elseif isa(Problem,'TP2')
+            save('TP2FE.mat', ['f' num2str(Problem.gen)], '-append');
+        elseif isa(Problem,'DS1')
+            save('DS1FE.mat', ['f' num2str(Problem.gen)], '-append');
+        elseif isa(Problem,'DS2')
+            save('DS2FE.mat', ['f' num2str(Problem.gen)], '-append');
+        elseif isa(Problem,'DS3')
+            save('DS3FE.mat', ['f' num2str(Problem.gen)], '-append');
+        elseif isa(Problem,'DS4')
+            save('DS4FE.mat', ['f' num2str(Problem.gen)], '-append');
+        elseif isa(Problem,'DS5')
+            save('DS5FE.mat', ['f' num2str(Problem.gen)], '-append');
+        end
     end
 
     %%

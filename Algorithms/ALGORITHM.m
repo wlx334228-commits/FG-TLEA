@@ -114,7 +114,7 @@ classdef ALGORITHM < handle & matlab.mixin.Heterogeneous
             drawnow(); obj.outputFcn(obj,obj.pro);
             obj.pro.gen = obj.pro.gen + 1;
             nofinish = obj.pro.ulFE+obj.pro.llFE < obj.pro.maxFE && terminationCheckU(ulArchive,obj.pro.gen);
-            if nofinish == 0
+            if nofinish == 0 && ~FGTLEAGetParameter('skipLegacySave',false)
                 res = Population;
                 ulFE = obj.pro.ulFE;
                 llFE = obj.pro.llFE;
@@ -265,7 +265,7 @@ classdef ALGORITHM < handle & matlab.mixin.Heterogeneous
             if ~isfield(obj.metric,name)
                 obj.metric.(name) = [cell2mat(obj.result(index,1)),cellfun(@(S)feval(name,S,obj.pro.optimum),obj.result(index,2))];
             end
-            if name ~= "runtime"
+            if name ~= "runtime" && ~FGTLEAGetParameter('skipLegacySave',false)
                 res = obj.metric.(name)(end,2);
                 filename = [name,'.mat'];
                 if isa(obj.pro,'TP1')

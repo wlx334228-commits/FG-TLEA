@@ -1,0 +1,15 @@
+# Experiment outputs
+Results/
+Data/
+tmp/
+
+# Generated MATLAB result files in the project root
+/*FE.mat
+/*HV.mat
+/hv.mat
+/temp.mat
+/*_result.mat
+
+# MATLAB autosaves and transient logs
+*.asv
+*.log

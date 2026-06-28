@@ -3,7 +3,7 @@ function [archive1,archive2,archive3,archive4,Relate] = decomposer(basicSolution
     basicsolution = basicSolution(unidrnd(size(basicSolution,2)));
     ulDec = basicsolution.ulDec;
     llDec = basicsolution.llDec;
-    epsilon = 1e-4;
+    epsilon = FGTLEAGetParameter('interactionEpsilon',1e-4);
     Dec = [basicsolution.ulDec basicsolution.llDec];
 
     % 将上层每一维决策变量进行改变
