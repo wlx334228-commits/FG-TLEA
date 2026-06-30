@@ -11,7 +11,7 @@ function run_epsilon_sensitivity()
 
     epsilonValues = [1e-2,1e-3,1e-4,1e-5,1e-6];
     problemNames  = {'TP1','DS1','GMP'};
-    numRuns       = 1;
+    numRuns       = 15;
 
     timestamp = datestr(now,'yyyymmdd_HHMMSS');
     resultsDir = fullfile(projectRoot,'Results','epsilon_sensitivity',timestamp);
