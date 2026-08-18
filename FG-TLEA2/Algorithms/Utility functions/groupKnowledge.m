@@ -4,13 +4,6 @@ function OffspringFinal = groupKnowledge(ulOffDecs,Elite,Population,Offspring,ar
     for i = 1:size(ulOffDecs,1)
         ulOffDec = ulOffDecs(i,:);
         llOffDecs = repmat(Elite(unidrnd(size(Elite,2))).llDecs,Problem.Nl,1);
-        transferRows = [];
-        transferDistanceThreshold = FGTLEAGetParameter('categoryTransferDistanceThreshold',0.01);
-        trackTransferDiagnostics = FGTLEAGetParameter('trackTransferDiagnostics',false);
-        if ~isempty(archive3) || ~isempty(archive4)
-            transferRatio = FGTLEAGetParameter('categoryTransferRatio',0.5);
-            transferRows = randomTransferRows(Problem.Nl,transferRatio);
-        end
         dis = [];
         disE = [];
         for kE = 1:size(Elite.ulDecs,1)
@@ -50,15 +43,10 @@ function OffspringFinal = groupKnowledge(ulOffDecs,Elite,Population,Offspring,ar
                 end
 
                 llTDec = Offspring((i-1)*Problem.Nl+1:i*Problem.Nl).llDecs;
-                minDistance = min(dis);
-                acceptedTransfer = minDistance <= transferDistanceThreshold;
-                if trackTransferDiagnostics
-                    recordTransferDecision(acceptedTransfer);
-                end
-                if acceptedTransfer
+                if min(dis) < 2
                     [~,index] = min(dis);
-                    llTDeKno = Population((index-1)*Problem.Nl+1:index*Problem.Nl).llDecs;
-                    llTDec(transferRows,archive3(sol)) = llTDeKno(transferRows,archive3(sol));
+                    llTDeKno = Population((index-1)*Problem.Nl+1:index*Problem.Nl).llDecs
+                    llTDec(1:Problem.Nl/2,archive3(sol)) = llTDeKno(1:Problem.Nl/2,archive3(sol));
                 end
                 llOffDecs(:,archive3(sol)) = llTDec(:,archive3(sol));
             end
@@ -82,15 +70,10 @@ function OffspringFinal = groupKnowledge(ulOffDecs,Elite,Population,Offspring,ar
                 end
 
                 llTDec = Offspring((i-1)*Problem.Nl+1:i*Problem.Nl).llDecs;
-                minDistance = min(dis);
-                acceptedTransfer = minDistance <= transferDistanceThreshold;
-                if trackTransferDiagnostics
-                    recordTransferDecision(acceptedTransfer);
-                end
-                if acceptedTransfer
+                if min(dis) < 2
                     [~,index] = min(dis);
-                    llTDeKno = Population((index-1)*Problem.Nl+1:index*Problem.Nl).llDecs;
-                    llTDec(transferRows,archive4(sol)) = llTDeKno(transferRows,archive4(sol));
+                    llTDeKno = Population((index-1)*Problem.Nl+1:index*Problem.Nl).llDecs
+                    llTDec(1:Problem.Nl/2,archive4(sol)) = llTDeKno(1:Problem.Nl/2,archive4(sol));
                 end
                 llOffDecs(:,archive4(sol)) = llTDec(:,archive4(sol));
             end
@@ -105,32 +88,6 @@ function OffspringFinal = groupKnowledge(ulOffDecs,Elite,Population,Offspring,ar
         end
         llOff = SOLUTION(ulOffDec,llOffDecs,Problem.Nu+i); 
         OffspringFinal = [OffspringFinal,llOff];
-    end
-end
-
-function rows = randomTransferRows(populationSize,ratio)
-    if isempty(ratio) || ~isnumeric(ratio) || ~isscalar(ratio) || ~isfinite(ratio)
-        ratio = 0.5;
-    end
-
-    ratio = min(max(ratio,0),1);
-    transferCount = max(1,min(populationSize,round(populationSize*ratio)));
-    rowOrder = randperm(populationSize);
-    rows = rowOrder(1:transferCount);
-end
-
-function recordTransferDecision(acceptedTransfer)
-    global FGTLEA_TRANSFER_DIAGNOSTICS;
-
-    if isempty(FGTLEA_TRANSFER_DIAGNOSTICS) || ~isstruct(FGTLEA_TRANSFER_DIAGNOSTICS)
-        FGTLEA_TRANSFER_DIAGNOSTICS = struct('attemptCount',0,'acceptedCount',0,'rejectedCount',0);
-    end
-
-    FGTLEA_TRANSFER_DIAGNOSTICS.attemptCount = FGTLEA_TRANSFER_DIAGNOSTICS.attemptCount + 1;
-    if acceptedTransfer
-        FGTLEA_TRANSFER_DIAGNOSTICS.acceptedCount = FGTLEA_TRANSFER_DIAGNOSTICS.acceptedCount + 1;
-    else
-        FGTLEA_TRANSFER_DIAGNOSTICS.rejectedCount = FGTLEA_TRANSFER_DIAGNOSTICS.rejectedCount + 1;
     end
 end
 
